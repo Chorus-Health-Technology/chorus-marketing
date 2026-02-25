@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cascade Health | Coming Soon</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafafa;
+            --text: #171717;
+            --muted: #737373;
+            --primary: #ea580c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .hero-top {
+            padding: 4vh 5vw 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1vh;
+        }
+
+        .coming-soon {
+            font-size: 0.55rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0.4rem 0;
+            opacity: 0.7;
+        }
+
+        .giant-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(3rem, 9vw, 7rem);
+            font-weight: 400;
+            line-height: 0.85;
+            letter-spacing: -0.02em;
+        }
+
+        .giant-logo .health {
+            color: var(--primary);
+            display: inline;
+        }
+
+        /* Middle organic area */
+        .organic-area {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #membrane-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .center-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 500px;
+            padding: 0 2rem;
+        }
+
+        .tagline {
+            font-size: 1.05rem;
+            color: var(--muted);
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        /* Bottom */
+        .bottom-section {
+            padding: 3vh 5vw 5vh;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-text {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .cta-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid var(--primary);
+            padding-bottom: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-text a:hover {
+            opacity: 0.7;
+        }
+
+        .legal-links {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .legal-links a {
+            color: var(--muted);
+            text-decoration: none;
+            border-bottom: none;
+        }
+
+        .legal-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .center-content { padding: 0 1.5rem; }
+            .tagline { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-top">
+        <div class="top-row">
+            <div class="coming-soon">Coming Soon</div>
+        </div>
+        <h1 class="giant-logo">Cascade <span class="health">Health</span></h1>
+    </div>
+
+    <div class="organic-area">
+        <canvas id="membrane-canvas"></canvas>
+        <div class="center-content">
+            <p class="tagline">Building the workforce, technology, and infrastructure for today's providers to administer tomorrow's cell and gene therapies.</p>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <p class="cta-text"><a href="mailto:hello@cascadehealth.com">Reach out</a> if you need support standing up your Cell & Gene therapy infrastructure.</p>
+        <p class="legal-links"><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms & Conditions</a></p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('membrane-canvas');
+        const ctx = canvas.getContext('2d');
+        let mouse = { x: null, y: null, active: false };
+        let time = 0;
+        let membranes = [];
+
+        function resize() {
+            canvas.width = canvas.offsetWidth * 2;
+            canvas.height = canvas.offsetHeight * 2;
+            ctx.scale(2, 2);
+            initMembranes();
+        }
+
+        function initMembranes() {
+            membranes = [];
+            const centerX = canvas.offsetWidth / 2;
+            const centerY = canvas.offsetHeight / 2;
+
+            for (let i = 0; i < 4; i++) {
+                membranes.push({
+                    baseRadius: 80 + i * 50,
+                    points: 60,
+                    noiseOffset: i * 100,
+                    speed: 0.01 - i * 0.002
+                });
+            }
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+            mouse.active = true;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            mouse.active = false;
+        });
+
+        const primary = { r: 234, g: 88, b: 12 };
+
+        function noise(x, y, z) {
+            return Math.sin(x * 0.1 + z) * Math.cos(y * 0.1 + z) * 0.5 + 0.5;
+        }
+
+        function drawMembrane(membrane, index) {
+            const centerX = canvas.offsetWidth / 2;
+            const centerY = canvas.offsetHeight / 2;
+            const points = [];
+
+            for (let i = 0; i < membrane.points; i++) {
+                const angle = (i / membrane.points) * Math.PI * 2;
+                
+                const noiseVal = noise(
+                    Math.cos(angle) * 2 + membrane.noiseOffset,
+                    Math.sin(angle) * 2 + membrane.noiseOffset,
+                    time * membrane.speed
+                );
+                
+                let radius = membrane.baseRadius + noiseVal * 30;
+
+                if (mouse.active && mouse.x && mouse.y) {
+                    const pointX = centerX + Math.cos(angle) * radius;
+                    const pointY = centerY + Math.sin(angle) * radius;
+                    const dx = mouse.x - pointX;
+                    const dy = mouse.y - pointY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 150) {
+                        radius += (150 - dist) * 0.3;
+                    }
+                }
+
+                points.push({
+                    x: centerX + Math.cos(angle) * radius,
+                    y: centerY + Math.sin(angle) * radius
+                });
+            }
+
+            ctx.beginPath();
+            points.forEach((point, i) => {
+                if (i === 0) ctx.moveTo(point.x, point.y);
+                else {
+                    const prev = points[i - 1];
+                    const cpX = (prev.x + point.x) / 2;
+                    const cpY = (prev.y + point.y) / 2;
+                    ctx.quadraticCurveTo(prev.x, prev.y, cpX, cpY);
+                }
+            });
+            ctx.closePath();
+
+            const opacity = 0.04 - index * 0.008;
+            ctx.fillStyle = `rgba(${primary.r}, ${primary.g}, ${primary.b}, ${opacity})`;
+            ctx.fill();
+
+            ctx.beginPath();
+            points.forEach((point, i) => {
+                if (i === 0) ctx.moveTo(point.x, point.y);
+                else ctx.lineTo(point.x, point.y);
+            });
+            ctx.closePath();
+            ctx.strokeStyle = `rgba(${primary.r}, ${primary.g}, ${primary.b}, ${0.15 - index * 0.03})`;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            return points;
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+
+            membranes.slice().reverse().forEach((membrane, i) => {
+                drawMembrane(membrane, membranes.length - 1 - i);
+            });
+
+            const centerX = canvas.offsetWidth / 2;
+            const centerY = canvas.offsetHeight / 2;
+
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2 + time * 0.005;
+                const dist = 120 + Math.sin(time * 0.02 + i) * 30;
+                const x = centerX + Math.cos(angle) * dist;
+                const y = centerY + Math.sin(angle) * dist;
+                const size = 4 + Math.sin(time * 0.03 + i) * 2;
+
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${primary.r}, ${primary.g}, ${primary.b}, 0.2)`;
+                ctx.fill();
+            }
+
+            time++;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
