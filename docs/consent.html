@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Consent Form | Cascade Health</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafafa;
+            --text: #171717;
+            --muted: #737373;
+            --primary: #ea580c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .header {
+            padding: 4vh 5vw 2vh;
+        }
+
+        .logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 400;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo .health {
+            color: var(--primary);
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4vh 5vw 8vh;
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 0.75rem;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-top: 0;
+            margin-bottom: 1.25rem;
+            color: var(--primary);
+        }
+
+        p { margin-bottom: 1rem; }
+
+        ul {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        li { margin-bottom: 0.5rem; }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--primary);
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover { opacity: 0.7; }
+
+        /* ── Clinic customization panel ── */
+        .clinic-panel {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .form-field.span-2 { grid-column: 1 / -1; }
+
+        .form-field label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .form-field input {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            padding: 0.55rem 0.75rem;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-field input:focus { border-color: var(--primary); }
+
+        .print-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.7rem 2rem;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .print-btn:hover { opacity: 0.85; }
+
+        /* ── Consent form card ── */
+        .consent-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 3rem 3.5rem;
+        }
+
+        .form-letterhead {
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .form-letterhead .lh-clinic {
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .form-letterhead .lh-meta {
+            color: var(--muted);
+        }
+
+        .form-title-bar {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            text-align: center;
+            border-top: 2px solid var(--text);
+            border-bottom: 2px solid var(--text);
+            padding: 0.6rem 0;
+            margin-bottom: 1.75rem;
+        }
+
+        /* Patient fill-in fields */
+        .patient-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .pf {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .pf.span-2 { grid-column: 1 / -1; }
+
+        .pf .underline {
+            flex: 1;
+            border-bottom: 1px solid #aaa;
+            height: 1.1em;
+            min-width: 60px;
+        }
+
+        /* Consent body */
+        .consent-body { font-size: 0.88rem; }
+        .consent-body p { margin-bottom: 0.75rem; }
+        .consent-body ul { margin-bottom: 0.75rem; }
+        .consent-body li { margin-bottom: 0.35rem; }
+
+        /* Signature block */
+        .sig-block {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .sig-row {
+            display: flex;
+            gap: 3rem;
+            align-items: flex-end;
+            margin-bottom: 1.5rem;
+        }
+
+        .sf {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .sf.narrow { flex: 0 0 170px; }
+
+        .sf .underline {
+            flex: 1;
+            border-bottom: 1px solid #aaa;
+            height: 1.1em;
+        }
+
+        .form-note {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        /* Web footer */
+        .footer {
+            padding: 4vh 5vw;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .footer a { margin: 0 1rem; }
+
+        /* ── Print ── */
+        @media print {
+            .no-print { display: none !important; }
+
+            body { background: #fff; font-size: 11pt; line-height: 1.5; }
+
+            .content { max-width: 100%; padding: 0; margin: 0; }
+
+            .consent-card {
+                border: none;
+                border-radius: 0;
+                padding: 0;
+                box-shadow: none;
+            }
+
+            .form-title-bar { font-size: 16pt; }
+
+            a {
+                color: var(--text) !important;
+                border-bottom: none !important;
+            }
+
+            .pf .underline,
+            .sf .underline { border-bottom: 1px solid #555; }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .consent-card { padding: 2rem 1.5rem; }
+
+            .form-grid,
+            .patient-fields { grid-template-columns: 1fr; }
+
+            .pf.span-2,
+            .form-field.span-2 { grid-column: 1; }
+
+            .sig-row { flex-direction: column; gap: 1.5rem; }
+            .sf.narrow { flex: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header no-print">
+        <a href="index.html" class="logo">Cascade <span class="health">Health</span></a>
+    </div>
+
+    <div class="content">
+
+        <h1 class="no-print">SMS Consent Form</h1>
+        <p class="page-subtitle no-print">
+            For clinic and facility use. Enter your facility's details below, then click
+            <strong>Print / Save as PDF</strong> to generate a completed form ready for patient signatures.
+        </p>
+
+        <!-- ── Clinic customization panel ── -->
+        <div class="clinic-panel no-print">
+            <h2>Your Facility Information</h2>
+            <div class="form-grid">
+                <div class="form-field span-2">
+                    <label>Clinic / Facility Name</label>
+                    <input type="text" id="clinicName" placeholder="e.g. Memorial Oncology Center" oninput="updatePreview()">
+                </div>
+                <div class="form-field span-2">
+                    <label>Street Address</label>
+                    <input type="text" id="address" placeholder="e.g. 456 Medical Plaza, Suite 200" oninput="updatePreview()">
+                </div>
+                <div class="form-field">
+                    <label>City, State ZIP</label>
+                    <input type="text" id="cityStateZip" placeholder="e.g. Seattle, WA 98101" oninput="updatePreview()">
+                </div>
+                <div class="form-field">
+                    <label>Date</label>
+                    <input type="date" id="formDate" oninput="updatePreview()">
+                </div>
+            </div>
+            <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+        </div>
+
+        <!-- ── Consent form (printed output) ── -->
+        <div class="consent-card" id="consentForm">
+
+            <div class="form-letterhead">
+                <div class="lh-clinic" id="previewClinicName">Sample Oncology Clinic</div>
+                <div class="lh-meta" id="previewAddress">123 Medical Plaza, Suite 100</div>
+                <div class="lh-meta" id="previewCityStateZip">Seattle, WA 98101</div>
+                <div class="lh-meta" id="previewDate">April 22, 2026</div>
+            </div>
+
+            <div class="form-title-bar">Patient SMS Consent Form</div>
+
+            <div class="patient-fields">
+                <div class="pf span-2">Patient Name: <span class="underline"></span></div>
+                <div class="pf">Date of Birth: <span class="underline"></span></div>
+                <div class="pf">Mobile Phone Number: <span class="underline"></span></div>
+            </div>
+
+            <div class="consent-body">
+                <p>By providing my mobile phone number and signing below, I consent to receive automated text message (SMS) notifications from <strong>Cascade Health</strong> regarding my health check-in assessments and treatment monitoring.</p>
+
+                <p>I understand and acknowledge:</p>
+                <ul>
+                    <li>Messages will notify me when health assessments are due, remind me of pending assessments, and alert me to overdue check-ins related to my treatment (including monitoring for Cytokine Release Syndrome (CRS) and ICANS).</li>
+                    <li>Message frequency varies based on my treatment schedule, typically <strong>1&ndash;3 messages per day</strong> during active monitoring periods.</li>
+                    <li><strong>Message and data rates may apply</strong> based on my mobile carrier plan.</li>
+                    <li>I may opt out at any time by replying <strong>STOP</strong> to any message. I may re-subscribe by replying <strong>START</strong>.</li>
+                    <li>I may reply <strong>HELP</strong> to any message for assistance or contact my care team directly.</li>
+                    <li>My mobile number will not be shared with third parties for marketing purposes.</li>
+                    <li>Cascade Health's Privacy Policy: cascadehealth.io/privacy.html</li>
+                    <li>Cascade Health's Terms of Service: cascadehealth.io/terms.html</li>
+                </ul>
+
+                <p>This consent is voluntary. Declining will not affect the quality of my medical care.</p>
+            </div>
+
+            <div class="sig-block">
+                <div class="sig-row">
+                    <div class="sf">Patient Signature <span class="underline"></span></div>
+                    <div class="sf narrow">Date <span class="underline"></span></div>
+                </div>
+                <div class="sig-row">
+                    <div class="sf">Printed Name <span class="underline"></span></div>
+                </div>
+                <div class="sig-row">
+                    <div class="sf">Staff Witness <span class="underline"></span></div>
+                    <div class="sf narrow">Date <span class="underline"></span></div>
+                </div>
+            </div>
+
+            <div class="form-note">
+                Retain signed copy in patient&rsquo;s medical record &nbsp;&middot;&nbsp;
+                Cascade Health &nbsp;&middot;&nbsp; cascadehealth.io &nbsp;&middot;&nbsp; hello@cascadehealth.com
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer no-print">
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="consent.html">SMS Consent Form</a>
+    </div>
+
+    <script>
+        // Default date to today
+        (function () {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('formDate').value = `${yyyy}-${mm}-${dd}`;
+            updatePreview();
+        })();
+
+        function updatePreview() {
+            const clinicName   = document.getElementById('clinicName').value.trim()    || 'Sample Oncology Clinic';
+            const address      = document.getElementById('address').value.trim()       || '123 Medical Plaza, Suite 100';
+            const cityStateZip = document.getElementById('cityStateZip').value.trim()  || 'Seattle, WA 98101';
+            const dateVal      = document.getElementById('formDate').value;
+
+            let dateStr = '';
+            if (dateVal) {
+                dateStr = new Date(dateVal + 'T00:00:00').toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+            }
+
+            document.getElementById('previewClinicName').textContent  = clinicName;
+            document.getElementById('previewAddress').textContent      = address;
+            document.getElementById('previewCityStateZip').textContent = cityStateZip;
+            document.getElementById('previewDate').textContent         = dateStr;
+        }
+    </script>
+
+</body>
+</html>
