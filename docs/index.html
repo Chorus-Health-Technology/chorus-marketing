@@ -214,6 +214,19 @@
             mouse.active = false;
         });
 
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            mouse.x = touch.clientX - rect.left;
+            mouse.y = touch.clientY - rect.top;
+            mouse.active = true;
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', () => {
+            mouse.active = false;
+        });
+
         const primary = { r: 234, g: 88, b: 12 };
 
         function noise(x, y, z) {
